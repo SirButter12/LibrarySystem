@@ -5,6 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.Comparator;
 
+/**
+ * This abstract class is the base to all Items, it sets 3 base parameters that all items share
+ * Id, title, responsable, and status. Responsable is just a person/organization responsable for this item.
+ * This is here because all classes have its own responsable analogue, whether it is the author, the publisher or the
+ * director.
+ * Implementing this here makes the code easer to maintain since the comparator has oly to be done in one place rather than
+ * in the n different subclasses.
+ * Status is initially in-store just because it makes sense to me that all items start in the store and then their
+ * status is updated as the time goes. This is only to simplify adding a new Item to the library.
+ */
 @EqualsAndHashCode
 public abstract class Item {
     @Getter @Setter
@@ -18,9 +28,9 @@ public abstract class Item {
     @Getter @Setter
     private Status status = Status.INSTORE;
 
-    public Item(String title, String author) {
+    public Item(String title, String responsable) {
         this.title = title;
-        this.responsable = author;
+        this.responsable = responsable;
         this.id = String.format("%06d", nextId++);
     }
 
