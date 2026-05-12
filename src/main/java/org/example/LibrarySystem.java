@@ -3,7 +3,6 @@ package org.example;
 import lombok.Getter;
 import org.example.items.Item;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class LibrarySystem {
@@ -32,6 +31,10 @@ public class LibrarySystem {
         }
 
         return false;
+    }
+
+    public static Item searchItem(String KeyWord) {
+
     }
 
 }

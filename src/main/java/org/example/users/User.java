@@ -27,7 +27,7 @@ public abstract class User {
     }
 
     public Item searchItem(String keyWord) {
-
+        return LibrarySystem.searchItem(keyWord);
     }
 
     public boolean borrowItem(Item item) {
