@@ -69,4 +69,8 @@ public abstract class Item {
     public enum Status {
         BORROWED, INSTORE, LOST
     }
+
+    public enum Type {
+        BOOK, DVD, MAGAZINE
+    }
 }
