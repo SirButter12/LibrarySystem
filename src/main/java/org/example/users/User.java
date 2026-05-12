@@ -60,6 +60,8 @@ public abstract class User {
 
             return false;
         }
+
+        return false;
     }
 
     @Override

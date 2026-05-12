@@ -36,7 +36,7 @@ public abstract class Item {
         this.id = String.format("%06d", nextId++);
     }
 
-    public class titleComparator implements Comparator<Item> {
+    public static class titleComparator implements Comparator<Item> {
         @Override
         public int compare(Item o1, Item o2) {
             int cmp = o1.getTitle().compareToIgnoreCase(o2.getTitle());
@@ -49,7 +49,7 @@ public abstract class Item {
         }
     }
 
-    public class ResponsableComparator implements Comparator<Item> {
+    public static class ResponsableComparator implements Comparator<Item> {
         @Override
         public int compare(Item o1, Item o2) {
             int cmp2 = o1.getResponsable().compareToIgnoreCase(o2.getResponsable());
