@@ -121,8 +121,28 @@ public class LibrarySystem {
         return false;
     }
 
-    public static Item searchItemRecursive(String KeyWord) {
-        return null;
+    public static Item searchItemRecursive(String keyword) {
+        Item result = binarySearch(itemsByName, keyword, 0, items.size() - 1);
+        if (result != null) {return result;}
+
+        return binarySearch(itemsByResponsable, keyword, 0, items.size() - 1);
+    }
+
+    private static Item binarySearch(List<Item> list, String keyword, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+
+        int mid = left + (right - left) / 2;
+        Item midItem = list.get(mid);
+        int cmp = midItem.getTitle().compareTo(keyword);
+
+        if (cmp == 0) { return midItem; };
+        if (cmp > 0) {
+            return binarySearch(list, keyword, left, mid - 1);
+        } else {
+            return binarySearch(list, keyword, mid + 1, right);
+        }
     }
 
     public static Item searchItemStream(String KeyWord) {
