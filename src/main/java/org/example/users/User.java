@@ -3,6 +3,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.LibrarySystem;
+import org.example.exceptions.BorrowedOverLimitsException;
 import org.example.items.Item;
 
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-@EqualsAndHashCode(callSuper = false)
 public abstract class User {
     @Setter
     private String name;
     private String id;
+    @Setter
     private static int nextId = 1;
     protected static Set<Item.Type> borrowable;
     protected List<Item> borrowedItems = new ArrayList<>();
@@ -60,7 +61,7 @@ public abstract class User {
             return false;
         }
 
-        return false;
+        throw new BorrowedOverLimitsException("User reached maximum amount of borrowed items, please return some");
     }
 
     @Override
