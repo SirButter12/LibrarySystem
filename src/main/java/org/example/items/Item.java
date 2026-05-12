@@ -16,18 +16,16 @@ import java.util.Comparator;
  * status is updated as the time goes. This is only to simplify adding a new Item to the library.
  */
 @EqualsAndHashCode
+@Getter
 public abstract class Item {
-    @Getter @Setter
+    @Setter
     private String title;
-    @Getter @Setter
+    @Setter
     private String responsable;
-    @Getter
     private String id;
-    @Getter
     private static int nextId = 1;
-    @Getter @Setter
+    @Setter
     private Status status = Status.INSTORE;
-    @Getter
     protected Type type;
 
     public Item(String title, String responsable) {

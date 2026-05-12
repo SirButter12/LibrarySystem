@@ -1,5 +1,4 @@
 package org.example.users;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.LibrarySystem;

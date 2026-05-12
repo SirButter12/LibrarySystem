@@ -29,6 +29,39 @@ public class LibrarySystem {
             return false;
         }
         borrowedItems.add(item);
+        item.setStatus(Item.Status.BORROWED);
+        return true;
+    }
+
+    public static boolean addLostItem(Item item) {
+        if (lostItems.contains(item)) {
+            return false;
+        }
+        lostItems.add(item);
+        item.setStatus(Item.Status.LOST);
+        return true;
+    }
+
+    public static boolean returnItem(Item item) {
+        if (items.contains(item)) {
+            return false;
+        }
+
+        if (borrowedItems.contains(item)) {
+            borrowedItems.remove(item);
+            items.add(item);
+            item.setStatus(Item.Status.INSTORE);
+            return true;
+        }
+
+        if (lostItems.contains(item)) {
+            lostItems.remove(item);
+            items.add(item);
+            item.setStatus(Item.Status.INSTORE);
+            return true;
+        }
+
+        items.add(item);
         return true;
     }
 
@@ -42,11 +75,10 @@ public class LibrarySystem {
     }
 
     public static Item searchItemRecursive(String KeyWord) {
-
+        return null;
     }
 
     public static Item searchItemStream(String KeyWord) {
-
+        return null;
     }
-
 }
