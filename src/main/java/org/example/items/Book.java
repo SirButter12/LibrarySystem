@@ -19,6 +19,7 @@ public class Book extends Item {
     public Book(String title, String author, Genre genre) {
         super(title, author);
         this.genre = genre;
+        super.type = Type.BOOK;
 
         USBN = String.format("%d", hashCode());
     }

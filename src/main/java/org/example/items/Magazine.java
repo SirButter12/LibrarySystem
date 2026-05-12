@@ -16,6 +16,7 @@ public class Magazine extends Item {
     public Magazine(String title, String publisher, int issueNumber) {
         super(title, publisher);
         this.issueNumber = issueNumber;
+        super.type = Type.MAGAZINE;
     }
 
     public String getPublisher() {

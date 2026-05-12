@@ -27,6 +27,8 @@ public abstract class Item {
     private static int nextId = 1;
     @Getter @Setter
     private Status status = Status.INSTORE;
+    @Getter
+    protected Type type;
 
     public Item(String title, String responsable) {
         this.title = title;

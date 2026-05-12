@@ -16,6 +16,7 @@ public class DVD extends Item {
     public DVD(String title, String director, int duration) {
         super(title, director);
         this.duration = duration;
+        super.type = Type.DVD;
     }
 
     public String getDirector() {
