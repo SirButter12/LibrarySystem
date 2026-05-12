@@ -1,28 +1,37 @@
 package org.example;
 
-import lombok.Getter;
 import org.example.items.Item;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class LibrarySystem {
-    @Getter
     private static List<Item> items = new ArrayList<>();
 
     private static List<Item> inStoreItems = new ArrayList<>();
     private static List<Item> borrowedItems = new ArrayList<>();
     private static List<Item> lostItems = new ArrayList<>();
 
-    private static List<Item> itemsByName;
-    private static List<Item> itemsByResponsable;
+    private static List<Item> itemsByName = new ArrayList<>();
+    private static List<Item> itemsByResponsable  = new ArrayList<>();
 
 
-
+    /**
+     * adds a brand new item to the item list
+     * @param item the item to be added
+     * @return true if succesful, false otherwise
+     */
     public static boolean addItem(Item item) {
         if (items.contains(item)) {
             return false;
         }
         items.add(item);
+
+        itemsByName.add(item);
+        itemsByName.sort(new Item.titleComparator());
+
+        itemsByResponsable.add(item);
+        itemsByResponsable.sort(new Item.ResponsableComparator());
 
         return switch (item.getStatus()) {
             case Item.Status.INSTORE -> inStoreItems.add(item);
@@ -36,6 +45,8 @@ public class LibrarySystem {
             return false;
         }
         items.remove(item);
+        itemsByName.remove(item);
+        itemsByResponsable.remove(item);
 
         return switch (item.getStatus()) {
             case Item.Status.INSTORE -> inStoreItems.remove(item);

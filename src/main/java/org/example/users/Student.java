@@ -1,6 +1,5 @@
 package org.example.users;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.example.items.Item;
 
 import java.util.Arrays;

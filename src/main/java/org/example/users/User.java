@@ -33,8 +33,6 @@ public abstract class User {
         return LibrarySystem.searchItemStream(keyWord);
     }
 
-
-
     public boolean borrowItem(Item item) {
         if (borrowedItems.size() < limit) {
             if (borrowable.contains(item.getType())) {
@@ -57,7 +55,7 @@ public abstract class User {
 
     public boolean returnItem(Item item) {
         if (borrowedItems.contains(item)) {
-            if (LibrarySystem.addItem(item)) {
+            if (LibrarySystem.returnItem(item)) {
                 borrowedItems.remove(item);
                 return true;
             }
