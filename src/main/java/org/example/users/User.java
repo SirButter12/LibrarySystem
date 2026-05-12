@@ -31,27 +31,14 @@ public abstract class User {
     }
 
     public boolean borrowItem(Item item) {
-        if (borrowable.contains(item.getType())) {
-            if (borrowedItems.contains(item)) {
-                return false;
-            }
-
-            if (LibrarySystem.removeItem(item)) {
-                borrowedItems.add(item);
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
-
-    public boolean returnItem(Item item) {
         if (borrowedItems.size() < limit) {
-            if (borrowedItems.contains(item)) {
-                if (LibrarySystem.addItem(item)) {
-                    borrowedItems.remove(item);
+            if (borrowable.contains(item.getType())) {
+                if (borrowedItems.contains(item)) {
+                    return false;
+                }
+
+                if (LibrarySystem.removeItem(item)) {
+                    borrowedItems.add(item);
                     return true;
                 }
 
@@ -61,7 +48,18 @@ public abstract class User {
             return false;
         }
 
-        throw new BorrowedOverLimitsException("User reached maximum amount of borrowed items, please return some");
+        throw new BorrowedOverLimitsException("User borrowed items limit reached, please return items");
+    }
+
+    public boolean returnItem(Item item) {
+        if (borrowedItems.contains(item)) {
+            if (LibrarySystem.addItem(item)) {
+                borrowedItems.remove(item);
+                return true;
+            }
+
+            return false;
+        }
     }
 
     @Override
