@@ -1,20 +1,24 @@
 package org.example.users;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.LibrarySystem;
 import org.example.items.Item;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Getter
+@EqualsAndHashCode(callSuper = false)
 public abstract class User {
+    @Setter
     private String name;
     private String id;
     private static int nextId = 1;
-    private static Set<Item.Type> borrowable;
-    private List<Item> borrowedItems = new ArrayList<>();
-    private static List<Item> itemsInLibrary = LibrarySystem.getItems();
+    protected static Set<Item.Type> borrowable;
+    protected List<Item> borrowedItems = new ArrayList<>();
+    protected int limit;
 
     public User(String name) {
         this.name = name;
@@ -43,15 +47,26 @@ public abstract class User {
     }
 
     public boolean returnItem(Item item) {
-        if (borrowedItems.contains(item)) {
-            if(LibrarySystem.addItem(item)) {
-                borrowedItems.remove(item);
-                return true;
+        if (borrowedItems.size() < limit) {
+            if (borrowedItems.contains(item)) {
+                if (LibrarySystem.addItem(item)) {
+                    borrowedItems.remove(item);
+                    return true;
+                }
+
+                return false;
             }
 
             return false;
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("name: %s\n" +
+                "id: %s\n",
+                this.name, this.id);
     }
 }

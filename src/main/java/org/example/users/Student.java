@@ -1,10 +1,29 @@
 package org.example.users;
-import java.util.Set;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.example.items.Item;
 
-import static org.example.users.Constants.BORROWABLE_STUDENT;
-import static org.example.users.Constants.BORROW_LIMIT_STUDENT;
+import java.util.Arrays;
+import java.util.HashSet;
 
-public class Student {
-    private int limit = BORROW_LIMIT_STUDENT;
-    private Set<String> borrowable = BORROWABLE_STUDENT;
+@EqualsAndHashCode(callSuper = true)
+public class Student extends User {
+    public Student(String name) {
+        super(name);
+        limit = Constants.BORROW_LIMIT_STUDENT;
+        borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK));
+    }
+
+    @Override
+    public String toString() {
+        return String.format( "Student { \n" +
+                super.toString() +
+                "borrowedItems: %s\n" +
+                "borrowableItems: %s\n" +
+                "borrowLimit: %s",
+                borrowedItems.toString(),
+                borrowable.toString(),
+                limit
+        );
+    }
 }
