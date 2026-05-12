@@ -65,9 +65,7 @@ public class LibrarySystem {
             return true;
         }
 
-        lostItems.add(item);
-        item.setStatus(Item.Status.LOST);
-        return true;
+        return false;
     }
 
     public static boolean returnItem(Item item) {
