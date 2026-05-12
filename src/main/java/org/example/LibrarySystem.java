@@ -24,6 +24,14 @@ public class LibrarySystem {
         return true;
     }
 
+    public static boolean addBorrowedItem(Item item) {
+        if (borrowedItems.contains(item)) {
+            return false;
+        }
+        borrowedItems.add(item);
+        return true;
+    }
+
     public static boolean removeItem(Item item) {
         if (items.contains(item)) {
             items.remove(item);
