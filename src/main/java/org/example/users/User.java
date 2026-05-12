@@ -42,8 +42,8 @@ public abstract class User {
                     return false;
                 }
 
-                if (LibrarySystem.removeItem(item)) {
-                    return borrowedItems.add(item) && LibrarySystem.addBorrowedItem(item);
+                if (LibrarySystem.addBorrowedItem(item)) {
+                    return borrowedItems.add(item);
                 }
 
                 return false;

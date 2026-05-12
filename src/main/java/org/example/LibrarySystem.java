@@ -28,15 +28,43 @@ public class LibrarySystem {
         if (borrowedItems.contains(item)) {
             return false;
         }
-        borrowedItems.add(item);
-        item.setStatus(Item.Status.BORROWED);
-        return true;
+
+        if (items.contains(item)) {
+            items.remove(item);
+            borrowedItems.add(item);
+            item.setStatus(Item.Status.BORROWED);
+            return true;
+        }
+
+        if (lostItems.contains(item)) {
+            lostItems.remove(item);
+            borrowedItems.add(item);
+            item.setStatus(Item.Status.BORROWED);
+            return true;
+        }
+
+        return false;
     }
 
     public static boolean addLostItem(Item item) {
         if (lostItems.contains(item)) {
             return false;
         }
+
+        if (items.contains(item)) {
+            items.remove(item);
+            lostItems.add(item);
+            item.setStatus(Item.Status.LOST);
+            return true;
+        }
+
+        if (borrowedItems.contains(item)) {
+            borrowedItems.remove(item);
+            lostItems.add(item);
+            item.setStatus(Item.Status.LOST);
+            return true;
+        }
+
         lostItems.add(item);
         item.setStatus(Item.Status.LOST);
         return true;
@@ -63,15 +91,6 @@ public class LibrarySystem {
 
         items.add(item);
         return true;
-    }
-
-    public static boolean removeItem(Item item) {
-        if (items.contains(item)) {
-            items.remove(item);
-            return true;
-        }
-
-        return false;
     }
 
     public static Item searchItemRecursive(String KeyWord) {
