@@ -33,7 +33,11 @@ public class LibrarySystem {
         return false;
     }
 
-    public static Item searchItem(String KeyWord) {
+    public static Item searchItemRecursive(String KeyWord) {
+
+    }
+
+    public static Item searchItemStream(String KeyWord) {
 
     }
 

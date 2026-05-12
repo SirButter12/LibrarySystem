@@ -26,9 +26,15 @@ public abstract class User {
         this.id = String.format("%06d", nextId++);
     }
 
-    public Item searchItem(String keyWord) {
-        return LibrarySystem.searchItem(keyWord);
+    public Item searchItemRecursive(String keyWord) {
+        return LibrarySystem.searchItemRecursive(keyWord);
     }
+
+    public Item searchItemStream(String keyWord) {
+        return LibrarySystem.searchItemStream(keyWord);
+    }
+
+
 
     public boolean borrowItem(Item item) {
         if (borrowedItems.size() < limit) {
