@@ -66,6 +66,7 @@ public class LibrarySystem {
             return false;
         }
 
+        users.sort(Constants.userComparator);
         return users.add(user);
     }
 
@@ -203,38 +204,42 @@ public class LibrarySystem {
         return binarySearch(itemsByResponsable, false ,keyword, 0, itemsByName.size() - 1);
     }
 
+    public static User searchUser(String name) {
+        return binarySearch(name, 0, users.size() - 1);
+    }
+
     /**
      * Recursive binary search over a sorted item list.
      * Compares either by title or responsable depending on {@code byTitle}.
      * Requires the list to be sorted by the corresponding field for correct results.
      *
      * @param list    the sorted list to search
-     * @param byTitle if true, compares by title; if false, compares by responsable
-     * @param keyword the exact value to search for (case-sensitive)
+     * @param mode 0 searches by Id,
+     * @param keyString the exact value to search for (case-sensitive)
      * @param left    the left boundary of the current search range (inclusive)
      * @param right   the right boundary of the current search range (inclusive)
      * @return the matching item, or null if not found
      */
-    private static Item binarySearch(List<Item> list, boolean byTitle, String keyword, int left, int right) {
+    private static Item binarySearch(List<Item> list, int mode, String keyString, int left, int right) {
         if (left > right) {
             return null;
         }
 
         int mid = left + (right - left) / 2;
         Item midItem = list.get(mid);
-        int cmp = byTitle ? midItem.getTitle().compareToIgnoreCase(keyword) :
-                midItem.getResponsable().compareToIgnoreCase(keyword);
+        int cmp = switch (mode) {
+            case 0 -> midItem.getId().compareToIgnoreCase(keyString);
+            case 1 -> midItem.getTitle().compareToIgnoreCase(keyString);
+            case 2 -> midItem.getResponsable().compareToIgnoreCase(keyString);
+            default -> throw new IllegalArgumentException("Invalid mode");
+        };
 
         if (cmp == 0) { return midItem; };
         if (cmp > 0) {
-            return binarySearch(list, byTitle ,keyword, left, mid - 1);
+            return binarySearch(list, mode ,keyString, left, mid - 1);
         } else {
-            return binarySearch(list, byTitle ,keyword, mid + 1, right);
+            return binarySearch(list, mode ,keyString, mid + 1, right);
         }
-    }
-
-    public static User searchUser(String name) {
-        return binarySearch(name, 0, users.size());
     }
 
     private static User binarySearch(String name, int left, int right) {

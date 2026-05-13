@@ -57,6 +57,13 @@ public abstract class Item {
         this.type = type;
     }
 
+    public static class IdComparator implements Comparator<Item> {
+        @Override
+        public int compare(Item o1, Item o2) {
+            return o1.getId().compareTo(o2.getId());
+        }
+    }
+
     /**
      * Sorts items by title (case-insensitive), breaking ties by responsable,
      * then by id to guarantee a stable total ordering.

@@ -1,4 +1,5 @@
 package org.example.users;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.LibrarySystem;
@@ -33,6 +34,12 @@ public abstract class User {
     public User(String name) {
         this.name = name;
         this.id = String.format("%06d", nextId++);
+    }
+
+    public User(String name, String id, List<Item> borrowedItems) {
+        this.name = name;
+        this.id = id;
+        this.borrowedItems = borrowedItems;
     }
 
     /**
