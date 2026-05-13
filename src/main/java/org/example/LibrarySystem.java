@@ -75,7 +75,7 @@ public class LibrarySystem {
         users.sort(Constants.userIdComparator);
 
         usersByName.add(user);
-        users.sort(Constants.userNameComparator);
+        usersByName.sort(Constants.userNameComparator);
 
         return true;
     }
