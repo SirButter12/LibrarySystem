@@ -61,6 +61,18 @@ public class LibrarySystem {
         };
     }
 
+    public static boolean addUser(User user) {
+        if (users.contains(user)) {
+            return false;
+        }
+
+        return users.add(user);
+    }
+
+    public static boolean removeUser(User user) {
+        return users.remove(user);
+    }
+
     /**
      * Removes an item from the library system entirely.
      * The item is removed from all lists it belongs to.
@@ -221,6 +233,10 @@ public class LibrarySystem {
         }
     }
 
+    public static User searchUser(String name) {
+        return binarySearch(name, 0, users.size());
+    }
+
     private static User binarySearch(String name, int left, int right) {
         if (left > right) {
             return null;
@@ -376,3 +392,5 @@ public class LibrarySystem {
         }
     }
 }
+
+//overengineering is my passion

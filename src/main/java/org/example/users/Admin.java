@@ -28,6 +28,18 @@ public class Admin extends User implements Reportable {
         return LibrarySystem.addLostItem(item);
     }
 
+    public User searchUser(String name) {
+        return LibrarySystem.searchUser(name);
+    }
+
+    public boolean addUser(User user) {
+        return LibrarySystem.addUser(user);
+    }
+
+    public boolean removeUser(User user) {
+        return LibrarySystem.removeUser(user);
+    }
+
     public void loadItems() {
         LibrarySystem.loadItems();
     }
