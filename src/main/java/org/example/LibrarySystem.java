@@ -235,7 +235,7 @@ public class LibrarySystem {
         result = binarySearchUser(1, keyString, 0, users.size() - 1);
         if (result != null) {return result;}
 
-        throw new InexistentItemException("This item does not exist in the system");
+        throw new InexistentItemException("This user does not exist in the system");
     }
 
     /**
