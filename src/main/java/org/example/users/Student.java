@@ -1,5 +1,6 @@
 package org.example.users;
 import lombok.EqualsAndHashCode;
+import org.example.exceptions.ItemNotBorrowableException;
 import org.example.items.Item;
 
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class Student extends User {
             return super.borrowItem(item);
         }
 
-        return false;
+        throw new ItemNotBorrowableException("Item not borrowable");
     }
 
     @Override

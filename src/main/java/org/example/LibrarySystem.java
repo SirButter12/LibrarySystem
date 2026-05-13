@@ -1,7 +1,11 @@
 package org.example;
 
+import org.example.exceptions.AllCopiesBorrowedException;
+import org.example.exceptions.LostItemSquaredException;
+import org.example.exceptions.ReturnedAnInStoreItemException;
 import org.example.items.Item;
 import org.example.users.Constants;
+import org.example.users.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,8 @@ public class LibrarySystem {
 
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
+
+    private static List<User> users = new ArrayList<>();
 
     public static boolean addItem(Item item) {
         if (items.contains(item)) {
@@ -52,69 +58,51 @@ public class LibrarySystem {
     }
 
     public static boolean addBorrowedItem(Item item) {
-        if (borrowedItems.contains(item)) {
-            return false;
-        }
+        Item.Status status = item.getStatus();
+        item.setStatus(Item.Status.BORROWED);
 
         if (inStoreItems.contains(item)) {
-            inStoreItems.remove(item);
-            borrowedItems.add(item);
-            item.setStatus(Item.Status.BORROWED);
-            return true;
+            return borrowedItems.add(item) && inStoreItems.remove(item);
         }
 
         if (lostItems.contains(item)) {
-            lostItems.remove(item);
-            borrowedItems.add(item);
-            item.setStatus(Item.Status.BORROWED);
-            return true;
+            return borrowedItems.add(item) && lostItems.remove(item);
         }
 
-        return false;
+        item.setStatus(status);
+        throw new AllCopiesBorrowedException("There is no more available copies");
     }
 
     public static boolean addLostItem(Item item) {
-        if (lostItems.contains(item)) {
-            return false;
-        }
+        Item.Status status = item.getStatus();
+        item.setStatus(Item.Status.LOST);
 
         if (inStoreItems.contains(item)) {
-            inStoreItems.remove(item);
-            lostItems.add(item);
-            item.setStatus(Item.Status.LOST);
-            return true;
+            return lostItems.add(item) && inStoreItems.remove(item);
         }
 
         if (borrowedItems.contains(item)) {
-            borrowedItems.remove(item);
-            lostItems.add(item);
-            item.setStatus(Item.Status.LOST);
-            return true;
+            return lostItems.add(item) && borrowedItems.remove(item);
         }
 
-        return false;
+        item.setStatus(status);
+        throw new LostItemSquaredException("How did you manage to lose an already lost item, you forgot about its existence or what?");
     }
 
     public static boolean returnItem(Item item) {
-        if (inStoreItems.contains(item)) {
-            return false;
-        }
+        Item.Status status = item.getStatus();
+        item.setStatus(Item.Status.INSTORE);
 
         if (borrowedItems.contains(item)) {
-            borrowedItems.remove(item);
-            inStoreItems.add(item);
-            item.setStatus(Item.Status.INSTORE);
-            return true;
+            return inStoreItems.add(item) && borrowedItems.remove(item);
         }
 
         if (lostItems.contains(item)) {
-            lostItems.remove(item);
-            inStoreItems.add(item);
-            item.setStatus(Item.Status.INSTORE);
-            return true;
+            return lostItems.remove(item) && inStoreItems.add(item);
         }
 
-        return false;
+        item.setStatus(status);
+        throw new ReturnedAnInStoreItemException("How are you doing this?");
     }
 
     public static Item searchItemRecursive(String keyword) {
