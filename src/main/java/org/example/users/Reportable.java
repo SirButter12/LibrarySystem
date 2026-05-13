@@ -1,5 +1,7 @@
 package org.example.users;
 
-public interface Reportable {
+import java.io.File;
 
+public interface Reportable {
+    File generateReport();
 }
