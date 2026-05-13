@@ -216,23 +216,23 @@ public class LibrarySystem {
      * @return the matching item, or null if not found
      */
     public static Item searchItemRecursive(String keyString) {
-        Item result = binarySearch(0 ,keyString, 0, items.size() - 1);
+        Item result = binarySearchItem(0 ,keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
-        result = binarySearch(1, keyString, 0, items.size() - 1);
+        result = binarySearchItem(1, keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
-        result = binarySearch(2 ,keyString, 0, items.size() - 1);
+        result = binarySearchItem(2 ,keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
         throw new InexistentItemException("This item does not exist in the system");
     }
 
     public static User searchUser(String keyString) {
-        User result = binarySearchUser(0, keyString, 0, items.size() - 1);
+        User result = binarySearchUser(0, keyString, 0, users.size() - 1);
         if (result != null) {return result;}
 
-        result = binarySearchUser(1, keyString, 0, items.size() - 1);
+        result = binarySearchUser(1, keyString, 0, users.size() - 1);
         if (result != null) {return result;}
 
         throw new InexistentItemException("This item does not exist in the system");
@@ -250,7 +250,7 @@ public class LibrarySystem {
      * @param right   the right boundary of the current search range (inclusive)
      * @return the matching item, or null if not found
      */
-    private static Item binarySearch(int mode, String keyString, int left, int right) {
+    private static Item binarySearchItem(int mode, String keyString, int left, int right) {
         if (left > right) {
             return null;
         }
@@ -271,9 +271,9 @@ public class LibrarySystem {
 
         if (cmp == 0) { return midItem; };
         if (cmp > 0) {
-            return binarySearch(mode ,keyString, left, mid - 1);
+            return binarySearchItem(mode ,keyString, left, mid - 1);
         } else {
-            return binarySearch(mode ,keyString, mid + 1, right);
+            return binarySearchItem(mode ,keyString, mid + 1, right);
         }
     }
 
