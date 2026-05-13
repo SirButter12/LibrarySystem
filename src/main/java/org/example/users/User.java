@@ -126,6 +126,8 @@ public abstract class User {
             if (result == 0) {
                 return  o1.getId().compareTo(o2.getId());
             }
+
+            return result;
         }
     }
 
