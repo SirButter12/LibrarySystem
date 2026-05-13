@@ -62,11 +62,11 @@ public class LibrarySystem {
         item.setStatus(Item.Status.BORROWED);
 
         if (inStoreItems.contains(item)) {
-            return borrowedItems.add(item) && inStoreItems.remove(item);
+            return successFullOperation(borrowedItems.add(item) && inStoreItems.remove(item), item, status);
         }
 
         if (lostItems.contains(item)) {
-            return borrowedItems.add(item) && lostItems.remove(item);
+            return successFullOperation(borrowedItems.add(item) && lostItems.remove(item), item, status);
         }
 
         item.setStatus(status);
@@ -78,11 +78,11 @@ public class LibrarySystem {
         item.setStatus(Item.Status.LOST);
 
         if (inStoreItems.contains(item)) {
-            return lostItems.add(item) && inStoreItems.remove(item);
+            return successFullOperation(lostItems.add(item) && inStoreItems.remove(item), item, status);
         }
 
         if (borrowedItems.contains(item)) {
-            return lostItems.add(item) && borrowedItems.remove(item);
+            return successFullOperation(lostItems.add(item) && borrowedItems.remove(item), item, status);
         }
 
         item.setStatus(status);
@@ -94,11 +94,11 @@ public class LibrarySystem {
         item.setStatus(Item.Status.INSTORE);
 
         if (borrowedItems.contains(item)) {
-            return inStoreItems.add(item) && borrowedItems.remove(item);
+            return successFullOperation(inStoreItems.add(item) && borrowedItems.remove(item), item, status);
         }
 
         if (lostItems.contains(item)) {
-            return lostItems.remove(item) && inStoreItems.add(item);
+            return successFullOperation(inStoreItems.add(item) && lostItems.remove(item), item, status);
         }
 
         item.setStatus(status);
@@ -111,6 +111,16 @@ public class LibrarySystem {
 
         return binarySearch(itemsByResponsable, keyword, 0, items.size() - 1);
     }
+
+    private static boolean successFullOperation(boolean success, Item item, Item.Status status) {
+        if (!success) {
+            item.setStatus(status);
+            return success;
+        }
+
+        return success;
+    }
+
 
     private static Item binarySearch(List<Item> list, String keyword, int left, int right) {
         if (left > right) {
