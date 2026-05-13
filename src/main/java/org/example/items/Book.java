@@ -38,6 +38,12 @@ public class Book extends Item {
         USBN = String.format("%d", hashCode());
     }
 
+    public Book(String title, String responsable, String id, Status status, Type type, String genre, String USBN) {
+        super(title, responsable, id, status, type);
+        this.genre = genre;
+        this.USBN = USBN;
+    }
+
     /**
      * Sets the title and recalculates the USBN since the title affects the hash.
      *

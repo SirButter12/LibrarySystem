@@ -29,6 +29,7 @@ public abstract class Item {
     private String responsable;
 
     private String id;
+    @Setter @Getter
     private static int nextId = 1;
     @Setter
     private Status status = Status.INSTORE;
@@ -46,6 +47,14 @@ public abstract class Item {
         this.title = title;
         this.responsable = responsable;
         this.id = String.format("%06d", nextId++);
+    }
+
+    public Item(String title, String responsable, String id, Status status, Type type) {
+        this.title = title;
+        this.responsable = responsable;
+        this.id = id;
+        this.status = status;
+        this.type = type;
     }
 
     /**

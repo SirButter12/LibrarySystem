@@ -29,6 +29,11 @@ public class DVD extends Item {
         this.duration = duration;
     }
 
+    public DVD(String title, String responsable, String id, Status status, Type type, int duration) {
+        super(title, responsable, id, status, type);
+        this.duration = duration;
+    }
+
     /**
      * Returns the director of this DVD.
      * Alias for {@link Item#getResponsable()}.

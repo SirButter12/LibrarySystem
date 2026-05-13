@@ -3,16 +3,21 @@ package org.example;
 import org.example.exceptions.AllCopiesBorrowedException;
 import org.example.exceptions.LostItemSquaredException;
 import org.example.exceptions.ReturnedAnInStoreItemException;
+import org.example.items.Book;
+import org.example.items.DVD;
 import org.example.items.Item;
+import org.example.items.Magazine;
 import org.example.users.Constants;
-import org.example.users.User;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
+
+import static org.example.items.Item.Type.DVD;
 
 /**
  * Manages the library's item inventory and their lifecycle across different states.
@@ -268,5 +273,88 @@ public class LibrarySystem {
         }
 
         return reportFile;
+    }
+
+    /**
+     * Loads items from src/main/resources/items.csv and registers them in the system.
+     * The last line of the file must be a single integer representing the last nextId processed,
+     * used to restore the id counter and avoid duplicates.
+     */
+    public static void loadItems() {
+        File file = new File("src/main/resources/items.csv");
+
+        try (Scanner input = new Scanner(file)) {
+            while (input.hasNextLine()) {
+                String row = input.nextLine().trim();
+                if (row.isEmpty()) continue;
+
+                try {
+                    int savedNextId = Integer.parseInt(row);
+                    Item.setNextId(savedNextId);
+                    break;
+                } catch (NumberFormatException ignored) {
+                    //keep goin bud
+                }
+
+                String[] data = row.split(",");
+                Item.Type type = Item.Type.valueOf(data[0]);
+                String id = data[1];
+                Item.Status status = Item.Status.valueOf(data[2]);
+                String title = data[3];
+                String responsable = data[4];
+
+                Item item = switch (type) {
+                    case BOOK -> new Book(title, responsable, id, status, Item.Type.BOOK, data[5], data[6]);
+                    case DVD -> new DVD(title, responsable, id, status, Item.Type.DVD, Integer.parseInt(data[5]));
+                    case MAGAZINE -> new Magazine(title, responsable, id, status, Item.Type.MAGAZINE, Integer.parseInt(data[5]));
+                };
+
+                addItem(item);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading items: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Saves all items to src/main/resources/items.csv in load order.
+     * Overwrites the file entirely. The last line is the current nextId counter.
+     */
+    public static void saveItems() {
+        File file = new File("src/main/resources/items.csv");
+
+        try (FileWriter fw = new FileWriter(file)) {
+            for (Item item : itemsByName) {
+                fw.write(item.getType() + ",");
+                fw.write(item.getId() + ",");
+                fw.write(item.getStatus() + ",");
+                fw.write(item.getTitle() + ",");
+                fw.write(item.getResponsable() + ",");
+
+                switch (item.getType()) {
+                    case BOOK -> {
+                        Book book = (Book) item;
+                        fw.write(book.getGenre() + ",");
+                        fw.write(book.getUSBN());
+                    }
+                    case DVD -> {
+                        DVD dvd = (DVD) item;
+                        fw.write(String.valueOf(dvd.getDuration()));
+                    }
+                    case MAGAZINE -> {
+                        Magazine magazine = (Magazine) item;
+                        fw.write(String.valueOf(magazine.getIssueNumber()));
+                    }
+                }
+
+                fw.write("\n");
+            }
+
+            // Last line: current nextId counter
+            fw.write(String.valueOf(Item.getNextId()));
+
+        } catch (IOException e) {
+            System.out.println("Error saving items: " + e.getMessage());
+        }
     }
 }

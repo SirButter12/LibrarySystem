@@ -28,6 +28,11 @@ public class Magazine extends Item {
         this.issueNumber = issueNumber;
     }
 
+    public Magazine(String title, String responsable, String id, Status status, Type type, int issueNumber) {
+        super(title, responsable, id, status, type);
+        this.issueNumber = issueNumber;
+    }
+
     /**
      * Returns the publisher of this magazine.
      * Alias for {@link Item#getResponsable()}.

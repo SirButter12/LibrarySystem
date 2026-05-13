@@ -20,7 +20,6 @@ public abstract class User {
     @Setter
     private String name;
     private String id;
-    @Setter
     private static int nextId = 1;
     protected List<Item> borrowedItems = new ArrayList<>();
     protected int limit;
