@@ -1,9 +1,10 @@
 package org.example;
 
 import org.example.items.Item;
+import org.example.users.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Stream;
 
 public class LibrarySystem {
@@ -23,10 +24,10 @@ public class LibrarySystem {
         items.add(item);
 
         itemsByName.add(item);
-        itemsByName.sort(new Item.titleComparator());
+        itemsByName.sort(Constants.titleComparator);
 
         itemsByResponsable.add(item);
-        itemsByResponsable.sort(new Item.ResponsableComparator());
+        itemsByResponsable.sort(Constants.responsableComparator);
 
         return switch (item.getStatus()) {
             case Item.Status.INSTORE -> inStoreItems.add(item);
