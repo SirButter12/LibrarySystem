@@ -19,8 +19,6 @@ import java.util.stream.Stream;
  * <p>All methods are static, treating this class as a singleton-like system.</p>
  */
 public class LibrarySystem {
-    private static List<Item> items = new ArrayList<>();
-
     private static List<Item> inStoreItems = new ArrayList<>();
     private static List<Item> borrowedItems = new ArrayList<>();
     private static List<Item> lostItems = new ArrayList<>();
@@ -39,10 +37,9 @@ public class LibrarySystem {
      * @return true if added successfully, false if the item already exists
      */
     public static boolean addItem(Item item) {
-        if (items.contains(item)) {
+        if (itemsByName.contains(item)) {
             return false;
         }
-        items.add(item);
 
         itemsByName.add(item);
         itemsByName.sort(Constants.titleComparator);
@@ -65,10 +62,10 @@ public class LibrarySystem {
      * @return true if removed successfully, false if the item does not exist
      */
     public static boolean removeItem(Item item) {
-        if (!items.contains(item)) {
+        if (!itemsByName.contains(item)) {
             return false;
         }
-        items.remove(item);
+
         itemsByName.remove(item);
         itemsByResponsable.remove(item);
 
@@ -181,10 +178,10 @@ public class LibrarySystem {
      * @return the matching item, or null if not found
      */
     public static Item searchItemRecursive(String keyword) {
-        Item result = binarySearch(itemsByName, true, keyword, 0, items.size() - 1);
+        Item result = binarySearch(itemsByName, true, keyword, 0, itemsByName.size() - 1);
         if (result != null) {return result;}
 
-        return binarySearch(itemsByResponsable, false ,keyword, 0, items.size() - 1);
+        return binarySearch(itemsByResponsable, false ,keyword, 0, itemsByName.size() - 1);
     }
 
     /**
