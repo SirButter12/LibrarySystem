@@ -6,35 +6,52 @@ import lombok.Setter;
 import java.util.Comparator;
 
 /**
- * This abstract class is the base to all Items, it sets 3 base parameters that all items share
- * Id, title, responsable, and status. Responsable is just a person/organization responsable for this item.
- * This is here because all classes have its own responsable analogue, whether it is the author, the publisher or the
- * director.
- * Implementing this here makes the code easer to maintain since the comparator has oly to be done in one place rather than
- * in the n different subclasses.
- * Status is initially in-store just because it makes sense to me that all items start in the store and then their
- * status is updated as the time goes. This is only to simplify adding a new Item to the library.
+ * Base class for all library items.
+ *
+ * <p>Defines the common fields shared across all item types: a unique auto-generated id,
+ * a title, a responsable (the person or organization accountable for the item — e.g. author,
+ * publisher, or director), and a lifecycle status.</p>
+ *
+ * <p>Centralizing the comparators here avoids duplicating sorting logic across subclasses,
+ * since all item types share the same sortable fields.</p>
+ *
+ * <p>Items are created with {@link Status#INSTORE} by default, reflecting the assumption
+ * that a newly registered item is physically present in the library.</p>
  */
 @EqualsAndHashCode
 @Getter
 public abstract class Item {
     @Setter
     private String title;
+
     @Setter
+    /** The person or organization accountable for this item (author, publisher, director, etc). */
     private String responsable;
+
     private String id;
     private static int nextId = 1;
     @Setter
     private Status status = Status.INSTORE;
     protected Type type;
 
+    /**
+     * Creates a new item with the given title and responsable, assigning it an auto-generated id.
+     * Status defaults to {@link Status#INSTORE}.
+     *
+     * @param title       the item's title
+     * @param responsable the person or organization accountable for this item
+     */
     public Item(String title, String responsable) {
         this.title = title;
         this.responsable = responsable;
         this.id = String.format("%06d", nextId++);
     }
 
-    public static class titleComparator implements Comparator<Item> {
+    /**
+     * Sorts items by title (case-insensitive), breaking ties by responsable,
+     * then by id to guarantee a stable total ordering.
+     */
+    public static class TitleComparator implements Comparator<Item> {
         @Override
         public int compare(Item o1, Item o2) {
             int cmp = o1.getTitle().compareToIgnoreCase(o2.getTitle());
@@ -47,6 +64,10 @@ public abstract class Item {
         }
     }
 
+    /**
+     * Sorts items by responsable (case-insensitive), breaking ties by title,
+     * then by id to guarantee a stable total ordering.
+     */
     public static class ResponsableComparator implements Comparator<Item> {
         @Override
         public int compare(Item o1, Item o2) {
@@ -66,10 +87,22 @@ public abstract class Item {
                 "Title: %s\n", id, title);
     }
 
+    /**
+     * Represents the current physical state of an item in the library.
+     *
+     * <ul>
+     *   <li>{@code INSTORE} — available for borrowing</li>
+     *   <li>{@code BORROWED} — currently checked out by a user</li>
+     *   <li>{@code LOST} — reported missing</li>
+     * </ul>
+     */
     public enum Status {
         BORROWED, INSTORE, LOST
     }
 
+    /**
+     * The media format of the item.
+     */
     public enum Type {
         BOOK, DVD, MAGAZINE
     }
