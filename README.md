@@ -56,9 +56,6 @@ LibraryManagementSystem/
 │   │       ├── items.csv               # Persisted item inventory
 │   │       ├── users.csv               # Persisted user registry
 │   │       └── reports/                # Generated inventory reports
-│   └── test/
-│       └── java/org/example/
-│           └── ...                     # JUnit test classes
 └── pom.xml
 ```
 
