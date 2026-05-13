@@ -34,18 +34,13 @@ public abstract class User {
 
     public boolean borrowItem(Item item) {
         if (borrowedItems.size() < limit) {
-            if (borrowable.contains(item.getType())) {
-                if (borrowedItems.contains(item)) {
-                    return false;
-                }
-
-                if (LibrarySystem.addBorrowedItem(item)) {
-                    return borrowedItems.add(item);
-                }
-
+            if (borrowedItems.contains(item)) {
                 return false;
             }
 
+            if (LibrarySystem.addBorrowedItem(item)) {
+                return borrowedItems.add(item);
+            }
             return false;
         }
 

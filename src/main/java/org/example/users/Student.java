@@ -8,12 +8,20 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 public class Student extends User {
-    protected static Set<Item.Type> borrowable;
+    protected static final Set<Item.Type> borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK));
 
     public Student(String name) {
         super(name);
         limit = Constants.BORROW_LIMIT_STUDENT;
-        borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK));
+    }
+
+    @Override
+    public boolean borrowItem(Item item) {
+        if (borrowable.contains(item.getType())) {
+            return super.borrowItem(item);
+        }
+
+        return false;
     }
 
     @Override
