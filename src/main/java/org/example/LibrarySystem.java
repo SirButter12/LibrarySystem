@@ -29,8 +29,6 @@ public class LibrarySystem {
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
 
-    private static List<User> users = new ArrayList<>();
-
     /**
      * Adds a new item to the library system.
      * The item is inserted into the master list, both sorted lists, and the
