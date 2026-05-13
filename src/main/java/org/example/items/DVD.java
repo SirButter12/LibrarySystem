@@ -5,24 +5,47 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * This is a subclass that describes a magazine it is just a basic item with an extra duration parameter
- * Responsable is externally called director
+ * Represents a DVD item in the library.
+ *
+ * <p>Extends {@link Item} with a {@code duration} field measured in minutes.
+ * The {@code responsable} field inherited from {@link Item} maps to the DVD's director,
+ * exposed through {@link #getDirector()} and {@link #setDirector(String)} for semantic clarity.</p>
  */
 @EqualsAndHashCode (callSuper = true)
 public class DVD extends Item {
     @Getter @Setter
+    /** Runtime of the DVD in minutes. */
     private int duration;
 
+    /**
+     * Creates a new DVD with the given title, director, and duration.
+     *
+     * @param title    the DVD's title
+     * @param director the DVD's director
+     * @param duration the runtime in minutes
+     */
     public DVD(String title, String director, int duration) {
         super(title, director);
         this.duration = duration;
         super.type = Type.DVD;
     }
 
+    /**
+     * Returns the director of this DVD.
+     * Alias for {@link Item#getResponsable()}.
+     *
+     * @return the director's name
+     */
     public String getDirector() {
         return super.getResponsable();
     }
 
+    /**
+     * Sets the director of this DVD.
+     * Alias for {@link Item#setResponsable(String)}.
+     *
+     * @param director the director's name
+     */
     public void setDirector(String director) {
         super.setResponsable(director);
     }
