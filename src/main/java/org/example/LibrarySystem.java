@@ -129,7 +129,8 @@ public class LibrarySystem {
 
         int mid = left + (right - left) / 2;
         Item midItem = list.get(mid);
-        int cmp = byTitle ? midItem.getTitle().compareTo(keyword) : midItem.getResponsable().compareTo(keyword);
+        int cmp = byTitle ? midItem.getTitle().compareToIgnoreCase(keyword) :
+                midItem.getResponsable().compareToIgnoreCase(keyword);
 
         if (cmp == 0) { return midItem; };
         if (cmp > 0) {
