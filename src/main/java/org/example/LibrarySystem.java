@@ -7,6 +7,9 @@ import org.example.items.Item;
 import org.example.users.Constants;
 import org.example.users.User;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -232,5 +235,40 @@ public class LibrarySystem {
                 )
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static File generateReport(File directory) {
+        int n = 1;
+        File reportFile;
+        do {
+            reportFile = new File(directory, "report_" + n + ".csv");
+            n++;
+        } while (reportFile.exists());
+
+        try (FileWriter fw = new FileWriter(reportFile)) {
+            fw.write("INSTORE,");
+            for (Item item : inStoreItems) {
+                fw.write(item.getId() + "|" + item.getTitle() + "|" + item.getType() + "|" + item.getResponsable() + ",");
+            }
+            fw.write("\n");
+
+            fw.write("BORROWED,");
+            for (Item item : borrowedItems) {
+                fw.write(item.getId() + "|" + item.getTitle() + "|" + item.getType() + "|" + item.getResponsable() + ",");
+            }
+            fw.write("\n");
+
+            fw.write("LOST,");
+            for (Item item : lostItems) {
+                fw.write(item.getId() + "|" + item.getTitle() + "|" + item.getType() + "|" + item.getResponsable() + ",");
+            }
+            fw.write("\n");
+
+        } catch (IOException e) {
+            System.out.println("Error generating report: " + e.getMessage());
+            return null;
+        }
+
+        return reportFile;
     }
 }

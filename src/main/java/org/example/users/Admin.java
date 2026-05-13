@@ -1,5 +1,7 @@
 package org.example.users;
 
+import org.example.LibrarySystem;
+
 import java.io.File;
 
 public class Admin extends User implements Reportable {
@@ -9,7 +11,7 @@ public class Admin extends User implements Reportable {
 
     @Override
     public File generateReport() {
-    return null;
+        File directory = new File("src/main/resources/reports");
+        return LibrarySystem.generateReport(directory);
     }
-
 }
