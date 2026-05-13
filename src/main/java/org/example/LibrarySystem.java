@@ -1,13 +1,13 @@
 package org.example;
 
 import org.example.exceptions.AllCopiesBorrowedException;
+import org.example.exceptions.InexistentItemException;
 import org.example.exceptions.LostItemSquaredException;
 import org.example.exceptions.ReturnedAnInStoreItemException;
 import org.example.items.Book;
 import org.example.items.DVD;
 import org.example.items.Item;
 import org.example.items.Magazine;
-import org.example.users.Constants;
 import org.example.users.User;
 
 import java.io.File;
@@ -32,6 +32,7 @@ public class LibrarySystem {
 
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
+    private static List<Item> itemsById = new ArrayList<>();
 
     private static List<User> users = new ArrayList<>();
 
@@ -48,11 +49,14 @@ public class LibrarySystem {
             return false;
         }
 
+        itemsById.add(item);
+        itemsByName.sort(Constants.itemIdComparator);
+
         itemsByName.add(item);
-        itemsByName.sort(Constants.titleComparator);
+        itemsByName.sort(Constants.itemTitleComparator);
 
         itemsByResponsable.add(item);
-        itemsByResponsable.sort(Constants.responsableComparator);
+        itemsByResponsable.sort(Constants.itemResponsableComparator);
 
         return switch (item.getStatus()) {
             case Item.Status.INSTORE -> inStoreItems.add(item);
@@ -194,14 +198,20 @@ public class LibrarySystem {
      * First searches by title in {@code itemsByName}; if not found,
      * searches by responsable in {@code itemsByResponsable}.
      *
-     * @param keyword the exact title or responsable to search for (case-sensitive)
+     * @param keyString the exact title, responsable or id search for (case-sensitive)
      * @return the matching item, or null if not found
      */
-    public static Item searchItemRecursive(String keyword) {
-        Item result = binarySearch(itemsByName, true, keyword, 0, itemsByName.size() - 1);
+    public static Item searchItemRecursive(String keyString) {
+        Item result = binarySearch(itemsByResponsable, 0 ,keyString, 0, itemsByName.size() - 1);
         if (result != null) {return result;}
 
-        return binarySearch(itemsByResponsable, false ,keyword, 0, itemsByName.size() - 1);
+        result = binarySearch(itemsByName, 1, keyString, 0, itemsByName.size() - 1);
+        if (result != null) {return result;}
+
+        result = binarySearch(itemsByResponsable, 2 ,keyString, 0, itemsByName.size() - 1);
+        if (result != null) {return result;}
+
+        throw new InexistentItemException("This item does not exist in the system");
     }
 
     public static User searchUser(String name) {

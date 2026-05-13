@@ -1,5 +1,6 @@
 package org.example.users;
 import lombok.EqualsAndHashCode;
+import org.example.Constants;
 import org.example.exceptions.ItemNotBorrowableException;
 import org.example.items.Item;
 

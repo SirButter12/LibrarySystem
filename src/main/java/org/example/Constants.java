@@ -1,6 +1,8 @@
-package org.example.users;
+package org.example;
 
 import org.example.items.Item;
+import org.example.users.User;
+
 import java.util.Comparator;
 
 /**
@@ -17,10 +19,13 @@ public class Constants {
     public static final int BORROW_LIMIT_TEACHER = 10;
 
     /** Comparator that sorts items by title, then responsable, then id. */
-    public static final Comparator<Item> titleComparator = new Item.TitleComparator();
+    public static final Comparator<Item> itemTitleComparator = new Item.TitleComparator();
 
     /** Comparator that sorts items by responsable, then title, then id. */
-    public static final Comparator<Item> responsableComparator = new Item.ResponsableComparator();
+    public static final Comparator<Item> itemResponsableComparator = new Item.ResponsableComparator();
+
+    /** Comparator that sorts items by id. */
+    public static final Comparator<Item> itemIdComparator = new Item.IdComparator();
 
     /** Comparator that compares users by name */
     public static final Comparator<User> userComparator = new User.NameComparator();
