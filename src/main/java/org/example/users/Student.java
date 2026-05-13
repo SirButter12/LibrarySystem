@@ -9,7 +9,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 public class Student extends User {
-    protected static final Set<Item.Type> borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK));
+    private static final Set<Item.Type> borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK));
 
     public Student(String name) {
         super(name);

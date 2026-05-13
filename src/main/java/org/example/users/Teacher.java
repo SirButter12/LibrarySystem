@@ -10,7 +10,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 public class Teacher extends User {
-    protected static final Set<Item.Type> borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK, Item.Type.DVD, Item.Type.MAGAZINE));
+    private static final Set<Item.Type> borrowable = new HashSet<>(Arrays.asList(Item.Type.BOOK, Item.Type.DVD, Item.Type.MAGAZINE));
 
     public Teacher(String name) {
         super(name);
