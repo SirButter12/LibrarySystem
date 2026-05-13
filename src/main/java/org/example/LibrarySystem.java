@@ -32,9 +32,10 @@ public class LibrarySystem {
 
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
-    private static List<Item> itemsById = new ArrayList<>();
+    private static List<Item> items = new ArrayList<>();
 
     private static List<User> users = new ArrayList<>();
+    private static List<User> usersByName = new ArrayList<>();
 
     /**
      * Adds a new item to the library system.
@@ -49,8 +50,8 @@ public class LibrarySystem {
             return false;
         }
 
-        itemsById.add(item);
-        itemsByName.sort(Constants.itemIdComparator);
+        items.add(item);
+        items.sort(Constants.itemIdComparator);
 
         itemsByName.add(item);
         itemsByName.sort(Constants.itemTitleComparator);
@@ -70,12 +71,24 @@ public class LibrarySystem {
             return false;
         }
 
-        users.sort(Constants.userComparator);
-        return users.add(user);
+        users.add(user);
+        users.sort(Constants.userIdComparator);
+
+        usersByName.add(user);
+        users.sort(Constants.userNameComparator);
+
+        return true;
     }
 
     public static boolean removeUser(User user) {
-        return users.remove(user);
+        if(!users.contains(user)) {
+            return false;
+        }
+
+        users.remove(user);
+        usersByName.remove(user);
+
+        return true;
     }
 
     /**
@@ -86,10 +99,11 @@ public class LibrarySystem {
      * @return true if removed successfully, false if the item does not exist
      */
     public static boolean removeItem(Item item) {
-        if (!itemsByName.contains(item)) {
+        if (!items.contains(item)) {
             return false;
         }
 
+        items.remove(item);
         itemsByName.remove(item);
         itemsByResponsable.remove(item);
 
@@ -202,20 +216,26 @@ public class LibrarySystem {
      * @return the matching item, or null if not found
      */
     public static Item searchItemRecursive(String keyString) {
-        Item result = binarySearch(itemsByResponsable, 0 ,keyString, 0, itemsByName.size() - 1);
+        Item result = binarySearch(0 ,keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
-        result = binarySearch(itemsByName, 1, keyString, 0, itemsByName.size() - 1);
+        result = binarySearch(1, keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
-        result = binarySearch(itemsByResponsable, 2 ,keyString, 0, itemsByName.size() - 1);
+        result = binarySearch(2 ,keyString, 0, items.size() - 1);
         if (result != null) {return result;}
 
         throw new InexistentItemException("This item does not exist in the system");
     }
 
-    public static User searchUser(String name) {
-        return binarySearch(name, 0, users.size() - 1);
+    public static User searchUser(String keyString) {
+        User result = binarySearchUser(0, keyString, 0, items.size() - 1);
+        if (result != null) {return result;}
+
+        result = binarySearchUser(1, keyString, 0, items.size() - 1);
+        if (result != null) {return result;}
+
+        throw new InexistentItemException("This item does not exist in the system");
     }
 
     /**
@@ -223,20 +243,25 @@ public class LibrarySystem {
      * Compares either by title or responsable depending on {@code byTitle}.
      * Requires the list to be sorted by the corresponding field for correct results.
      *
-     * @param list    the sorted list to search
-     * @param mode 0 searches by Id,
+     *
+     * @param mode 0 searches by Id, 1 by title, and 2 by responsible
      * @param keyString the exact value to search for (case-sensitive)
      * @param left    the left boundary of the current search range (inclusive)
      * @param right   the right boundary of the current search range (inclusive)
      * @return the matching item, or null if not found
      */
-    private static Item binarySearch(List<Item> list, int mode, String keyString, int left, int right) {
+    private static Item binarySearch(int mode, String keyString, int left, int right) {
         if (left > right) {
             return null;
         }
 
         int mid = left + (right - left) / 2;
-        Item midItem = list.get(mid);
+        Item midItem = switch (mode) {
+            case 0 -> items.get(mid);
+            case 1 -> itemsByName.get(mid);
+            case 2 -> itemsByResponsable.get(mid);
+            default -> throw new IllegalArgumentException("Invalid mode");
+        };
         int cmp = switch (mode) {
             case 0 -> midItem.getId().compareToIgnoreCase(keyString);
             case 1 -> midItem.getTitle().compareToIgnoreCase(keyString);
@@ -246,26 +271,35 @@ public class LibrarySystem {
 
         if (cmp == 0) { return midItem; };
         if (cmp > 0) {
-            return binarySearch(list, mode ,keyString, left, mid - 1);
+            return binarySearch(mode ,keyString, left, mid - 1);
         } else {
-            return binarySearch(list, mode ,keyString, mid + 1, right);
+            return binarySearch(mode ,keyString, mid + 1, right);
         }
     }
 
-    private static User binarySearch(String name, int left, int right) {
+    private static User binarySearchUser(int mode, String name, int left, int right) {
         if (left > right) {
             return null;
         }
 
         int mid = left + (right - left) / 2;
-        User midUser = users.get(mid);
-        int cmp = users.get(mid).getName().compareToIgnoreCase(name);
+        User midUser = switch (mode) {
+            case 0 -> users.get(mid);
+            case 1 -> usersByName.get(mid);
+            default -> throw new IllegalArgumentException("Invalid mode");
+        };
+
+        int cmp = switch (mode) {
+            case 0 -> midUser.getId().compareToIgnoreCase(name);
+            case 1 -> midUser.getName().compareToIgnoreCase(name);
+            default -> throw new IllegalArgumentException("Invalid mode");
+        };
 
         if (cmp == 0) { return midUser; };
         if (cmp > 0) {
-            return binarySearch(name, left, mid - 1);
+            return binarySearchUser(mode, name, left, mid - 1);
         } else {
-            return binarySearch(name, mid + 1, right);
+            return binarySearchUser(mode, name, mid + 1, right);
         }
     }
 
