@@ -8,6 +8,7 @@ import org.example.items.DVD;
 import org.example.items.Item;
 import org.example.items.Magazine;
 import org.example.users.Constants;
+import org.example.users.User;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
-
-import static org.example.items.Item.Type.DVD;
 
 /**
  * Manages the library's item inventory and their lifecycle across different states.
@@ -33,6 +32,8 @@ public class LibrarySystem {
 
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
+
+    private static List<User> users = new ArrayList<>();
 
     /**
      * Adds a new item to the library system.
@@ -217,6 +218,23 @@ public class LibrarySystem {
             return binarySearch(list, byTitle ,keyword, left, mid - 1);
         } else {
             return binarySearch(list, byTitle ,keyword, mid + 1, right);
+        }
+    }
+
+    private static User binarySearch(String name, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+
+        int mid = left + (right - left) / 2;
+        User midUser = users.get(mid);
+        int cmp = users.get(mid).getName().compareToIgnoreCase(name);
+
+        if (cmp == 0) { return midUser; };
+        if (cmp > 0) {
+            return binarySearch(name, left, mid - 1);
+        } else {
+            return binarySearch(name, mid + 1, right);
         }
     }
 
