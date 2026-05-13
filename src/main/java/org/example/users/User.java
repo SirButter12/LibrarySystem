@@ -121,7 +121,18 @@ public abstract class User {
     public static class NameComparator implements Comparator<User> {
         @Override
         public int compare(User o1, User o2) {
-            return o1.getName().compareTo(o2.getName());
+            int result = o1.getName().compareTo(o2.getName());
+
+            if (result == 0) {
+                return  o1.getId().compareTo(o2.getId());
+            }
+        }
+    }
+
+    public static class IdComparator implements Comparator<User> {
+        @Override
+        public int compare(User o1, User o2) {
+            return  o1.getId().compareTo(o2.getId());
         }
     }
 }

@@ -28,5 +28,8 @@ public class Constants {
     public static final Comparator<Item> itemIdComparator = new Item.IdComparator();
 
     /** Comparator that compares users by name */
-    public static final Comparator<User> userComparator = new User.NameComparator();
+    public static final Comparator<User> userNameComparator = new User.NameComparator();
+
+    /** Comparator that sorts users by id. */
+    public static final Comparator<User> userIdComparator = new User.IdComparator();
 }
