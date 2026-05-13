@@ -21,4 +21,7 @@ public class Constants {
 
     /** Comparator that sorts items by responsable, then title, then id. */
     public static final Comparator<Item> responsableComparator = new Item.ResponsableComparator();
+
+    /** Comparator that compares users by name */
+    public static final Comparator<User> userComparator = new User.NameComparator();
 }

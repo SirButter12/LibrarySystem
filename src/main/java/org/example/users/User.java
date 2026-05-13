@@ -6,6 +6,7 @@ import org.example.exceptions.BorrowedOverLimitsException;
 import org.example.items.Item;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -108,5 +109,12 @@ public abstract class User {
         return String.format("name: %s\n" +
                 "id: %s\n",
                 this.name, this.id);
+    }
+
+    public static class NameComparator implements Comparator<User> {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
     }
 }
