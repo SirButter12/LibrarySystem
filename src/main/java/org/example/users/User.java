@@ -16,7 +16,6 @@ public abstract class User {
     private String id;
     @Setter
     private static int nextId = 1;
-    protected static Set<Item.Type> borrowable;
     protected List<Item> borrowedItems = new ArrayList<>();
     protected int limit;
 

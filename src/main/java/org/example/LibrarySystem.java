@@ -4,6 +4,7 @@ import org.example.items.Item;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 public class LibrarySystem {
     private static List<Item> items = new ArrayList<>();
@@ -15,12 +16,6 @@ public class LibrarySystem {
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
 
-
-    /**
-     * adds a brand new item to the item list
-     * @param item the item to be added
-     * @return true if succesful, false otherwise
-     */
     public static boolean addItem(Item item) {
         if (items.contains(item)) {
             return false;
@@ -145,7 +140,14 @@ public class LibrarySystem {
         }
     }
 
-    public static Item searchItemStream(String KeyWord) {
-        return null;
+    public static Item searchItemStream(String keyword) {
+        return Stream.concat(
+                        itemsByName.stream()
+                                .filter(item -> item.getTitle().equalsIgnoreCase(keyword)),
+                        itemsByResponsable.stream()
+                                .filter(item -> item.getResponsable().equalsIgnoreCase(keyword))
+                )
+                .findFirst()
+                .orElse(null);
     }
 }

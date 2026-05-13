@@ -4,9 +4,12 @@ import org.example.items.Item;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 public class Student extends User {
+    protected static Set<Item.Type> borrowable;
+
     public Student(String name) {
         super(name);
         limit = Constants.BORROW_LIMIT_STUDENT;
