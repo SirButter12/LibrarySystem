@@ -33,7 +33,7 @@ public class Student extends User {
                 "borrowableItems: %s\n" +
                 "borrowLimit: %s",
                 borrowedItems.toString(),
-                borrowable.toString(),
+                borrowable,
                 limit
         );
     }

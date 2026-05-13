@@ -34,7 +34,7 @@ public class Teacher extends User {
                         "borrowableItems: %s\n" +
                         "borrowLimit: %s",
                 borrowedItems.toString(),
-                borrowable.toString(),
+                borrowable,
                 limit
         );
     }
