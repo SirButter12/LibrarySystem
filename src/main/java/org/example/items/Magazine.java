@@ -24,9 +24,8 @@ public class Magazine extends Item {
      * @param issueNumber the edition number
      */
     public Magazine(String title, String publisher, int issueNumber) {
-        super(title, publisher);
+        super(title, publisher, Type.MAGAZINE);
         this.issueNumber = issueNumber;
-        super.type = Type.MAGAZINE;
     }
 
     /**
@@ -54,7 +53,7 @@ public class Magazine extends Item {
         return String.format("Magazine {\n" +
                         super.toString() +
                         "Publisher: %s\n" +
-                        "IssueNumber: %dm\n"+
+                        "IssueNumber: %d\n"+
                         "} \n",
                 this.getPublisher(), issueNumber);
     }

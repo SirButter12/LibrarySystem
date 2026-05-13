@@ -24,15 +24,15 @@ public abstract class Item {
     @Setter
     private String title;
 
-    @Setter
     /** The person or organization accountable for this item (author, publisher, director, etc). */
+    @Setter
     private String responsable;
 
     private String id;
     private static int nextId = 1;
     @Setter
     private Status status = Status.INSTORE;
-    protected Type type;
+    private final Type type;
 
     /**
      * Creates a new item with the given title and responsable, assigning it an auto-generated id.
@@ -41,7 +41,8 @@ public abstract class Item {
      * @param title       the item's title
      * @param responsable the person or organization accountable for this item
      */
-    public Item(String title, String responsable) {
+    public Item(String title, String responsable, Type type) {
+        this.type = type;
         this.title = title;
         this.responsable = responsable;
         this.id = String.format("%06d", nextId++);

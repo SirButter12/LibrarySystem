@@ -25,9 +25,8 @@ public class DVD extends Item {
      * @param duration the runtime in minutes
      */
     public DVD(String title, String director, int duration) {
-        super(title, director);
+        super(title, director, Type.DVD);
         this.duration = duration;
-        super.type = Type.DVD;
     }
 
     /**

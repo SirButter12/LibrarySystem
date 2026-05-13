@@ -32,9 +32,8 @@ public class Book extends Item {
      * @param genre  the book's genre
      */
     public Book(String title, String author, String genre) {
-        super(title, author);
+        super(title, author, Type.BOOK);
         this.genre = genre;
-        super.type = Type.BOOK;
 
         USBN = String.format("%d", hashCode());
     }
