@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Manages the library's item inventory and their lifecycle across different states.
+ * Items are tracked in multiple lists simultaneously: a general list, status-based lists
+ * (in-store, borrowed, lost), and two sorted lists for search purposes.
+ *
+ * <p>All methods are static, treating this class as a singleton-like system.</p>
+ */
 public class LibrarySystem {
     private static List<Item> items = new ArrayList<>();
 
@@ -23,6 +30,14 @@ public class LibrarySystem {
 
     private static List<User> users = new ArrayList<>();
 
+    /**
+     * Adds a new item to the library system.
+     * The item is inserted into the master list, both sorted lists, and the
+     * appropriate status list based on its current status.
+     *
+     * @param item the item to add
+     * @return true if added successfully, false if the item already exists
+     */
     public static boolean addItem(Item item) {
         if (items.contains(item)) {
             return false;
@@ -42,6 +57,13 @@ public class LibrarySystem {
         };
     }
 
+    /**
+     * Removes an item from the library system entirely.
+     * The item is removed from all lists it belongs to.
+     *
+     * @param item the item to remove
+     * @return true if removed successfully, false if the item does not exist
+     */
     public static boolean removeItem(Item item) {
         if (!items.contains(item)) {
             return false;
@@ -57,6 +79,15 @@ public class LibrarySystem {
         };
     }
 
+    /**
+     * Marks an item as borrowed, moving it from its current status list to {@code borrowedItems}.
+     * The item must currently be in-store or lost; if it is already borrowed,
+     * an exception is thrown.
+     *
+     * @param item the item to borrow
+     * @return true if the operation succeeded
+     * @throws AllCopiesBorrowedException if the item is already borrowed
+     */
     public static boolean addBorrowedItem(Item item) {
         Item.Status status = item.getStatus();
         item.setStatus(Item.Status.BORROWED);
@@ -73,6 +104,15 @@ public class LibrarySystem {
         throw new AllCopiesBorrowedException("There is no more available copies");
     }
 
+    /**
+     * Marks an item as lost, moving it from its current status list to {@code lostItems}.
+     * The item must currently be in-store or borrowed; if it is already lost,
+     * an exception is thrown.
+     *
+     * @param item the item to mark as lost
+     * @return true if the operation succeeded
+     * @throws LostItemSquaredException if the item is already lost
+     */
     public static boolean addLostItem(Item item) {
         Item.Status status = item.getStatus();
         item.setStatus(Item.Status.LOST);
@@ -89,6 +129,15 @@ public class LibrarySystem {
         throw new LostItemSquaredException("How did you manage to lose an already lost item, you forgot about its existence or what?");
     }
 
+    /**
+     * Returns an item to the library, moving it from its current status list to {@code inStoreItems}.
+     * The item must currently be borrowed or lost; if it is already in-store,
+     * an exception is thrown.
+     *
+     * @param item the item being returned
+     * @return true if the operation succeeded
+     * @throws ReturnedAnInStoreItemException if the item is already in the library
+     */
     public static boolean returnItem(Item item) {
         Item.Status status = item.getStatus();
         item.setStatus(Item.Status.INSTORE);
@@ -105,13 +154,15 @@ public class LibrarySystem {
         throw new ReturnedAnInStoreItemException("How are you doing this?");
     }
 
-    public static Item searchItemRecursive(String keyword) {
-        Item result = binarySearch(itemsByName, true, keyword, 0, items.size() - 1);
-        if (result != null) {return result;}
-
-        return binarySearch(itemsByResponsable, false ,keyword, 0, items.size() - 1);
-    }
-
+    /**
+     * Rolls back an item's status if a list operation fails, keeping
+     * the item's status field consistent with the list it actually belongs to.
+     *
+     * @param success whether the list operation succeeded
+     * @param item    the item whose status may need to be rolled back
+     * @param status  the previous status to restore on failure
+     * @return the result of the operation
+     */
     private static boolean successFullOperation(boolean success, Item item, Item.Status status) {
         if (!success) {
             item.setStatus(status);
@@ -121,7 +172,33 @@ public class LibrarySystem {
         return success;
     }
 
+    /**
+     * Searches for an item by keyword using recursive binary search.
+     * First searches by title in {@code itemsByName}; if not found,
+     * searches by responsable in {@code itemsByResponsable}.
+     *
+     * @param keyword the exact title or responsable to search for (case-sensitive)
+     * @return the matching item, or null if not found
+     */
+    public static Item searchItemRecursive(String keyword) {
+        Item result = binarySearch(itemsByName, true, keyword, 0, items.size() - 1);
+        if (result != null) {return result;}
 
+        return binarySearch(itemsByResponsable, false ,keyword, 0, items.size() - 1);
+    }
+
+    /**
+     * Recursive binary search over a sorted item list.
+     * Compares either by title or responsable depending on {@code byTitle}.
+     * Requires the list to be sorted by the corresponding field for correct results.
+     *
+     * @param list    the sorted list to search
+     * @param byTitle if true, compares by title; if false, compares by responsable
+     * @param keyword the exact value to search for (case-sensitive)
+     * @param left    the left boundary of the current search range (inclusive)
+     * @param right   the right boundary of the current search range (inclusive)
+     * @return the matching item, or null if not found
+     */
     private static Item binarySearch(List<Item> list, boolean byTitle, String keyword, int left, int right) {
         if (left > right) {
             return null;
@@ -140,6 +217,15 @@ public class LibrarySystem {
         }
     }
 
+    /**
+     * Searches for an item by keyword using streams.
+     * First searches by title, then by responsable (case-insensitive).
+     * Unlike {@link #searchItemRecursive}, the second stream is only
+     * evaluated if the first yields no results.
+     *
+     * @param keyword the title or responsable to search for (case-insensitive)
+     * @return the first matching item, or null if not found
+     */
     public static Item searchItemStream(String keyword) {
         return Stream.concat(
                         itemsByName.stream()
