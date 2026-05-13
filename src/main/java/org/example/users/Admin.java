@@ -120,4 +120,12 @@ public class Admin extends User implements Reportable {
     public void saveItems() {
         LibrarySystem.saveItems();
     }
+
+    @Override
+    public String toString() {
+        return String.format ("Admin {\n" +
+                super.toString() +
+                "}\n"
+        );
+    }
 }

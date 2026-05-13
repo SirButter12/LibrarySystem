@@ -1,5 +1,6 @@
 package org.example;
 
+import lombok.Getter;
 import org.example.exceptions.AllCopiesBorrowedException;
 import org.example.exceptions.InexistentItemException;
 import org.example.exceptions.LostItemSquaredException;
@@ -35,8 +36,10 @@ public class LibrarySystem {
 
     private static List<Item> itemsByName = new ArrayList<>();
     private static List<Item> itemsByResponsable  = new ArrayList<>();
+    @Getter
     private static List<Item> items = new ArrayList<>();
 
+    @Getter
     private static List<User> users = new ArrayList<>();
     private static List<User> usersByName = new ArrayList<>();
 
