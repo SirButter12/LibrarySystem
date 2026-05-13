@@ -8,6 +8,9 @@ import org.example.items.Book;
 import org.example.items.DVD;
 import org.example.items.Item;
 import org.example.items.Magazine;
+import org.example.users.Admin;
+import org.example.users.Student;
+import org.example.users.Teacher;
 import org.example.users.User;
 
 import java.io.File;
@@ -438,6 +441,92 @@ public class LibrarySystem {
 
         } catch (IOException e) {
             System.out.println("Error saving items: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads users from src/main/resources/users.csv and registers them in the system.
+     * Borrowed items are resolved by id against the items list.
+     * The last line must be a single integer representing the last nextId processed.
+     */
+    public static void loadUsers() {
+        File file = new File("src/main/resources/users.csv");
+
+        try (Scanner input = new Scanner(file)) {
+            while (input.hasNextLine()) {
+                String row = input.nextLine().trim();
+                if (row.isEmpty()) continue;
+
+                try {
+                    int savedNextId = Integer.parseInt(row);
+                    User.setNextId(savedNextId);
+                    break;
+                } catch (NumberFormatException ignored) {
+                    // keep goin bud
+                }
+
+                String[] data = row.split(",");
+                String type = data[0];
+                String id = data[1];
+                String name = data[2];
+
+                List<Item> borrowedItems = new ArrayList<>();
+                if (data.length > 3 && !data[3].isBlank()) {
+                    String[] itemIds = data[3].split("\\.");
+                    for (String itemId : itemIds) {
+                        Item found = binarySearchItem(0, itemId, 0, items.size() - 1);
+                        if (found != null) borrowedItems.add(found);
+                    }
+                }
+
+                User user = switch (type) {
+                    case "student" -> new Student(name, id, borrowedItems);
+                    case "teacher" -> new Teacher(name, id, borrowedItems);
+                    case "admin"   -> new Admin(name, id, borrowedItems);
+                    default -> throw new IllegalArgumentException("Unknown user type: " + type);
+                };
+
+                addUser(user);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading users: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Saves all users to src/main/resources/users.csv, overwriting the file entirely.
+     * Borrowed items are stored as dot-separated ids. The last line is the current nextId counter.
+     */
+    public static void saveUsers() {
+        File file = new File("src/main/resources/users.csv");
+
+        try (FileWriter fw = new FileWriter(file)) {
+            for (User user : users) {
+                String type;
+                if (user instanceof Admin)        type = "admin";
+                else if (user instanceof Teacher) type = "teacher";
+                else                              type = "student";
+
+                fw.write(type + ",");
+                fw.write(user.getId() + ",");
+                fw.write(user.getName() + ",");
+
+                // Borrowed items as dot-separated ids
+                List<Item> borrowed = user.getBorrowedItems();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < borrowed.size(); i++) {
+                    sb.append(borrowed.get(i).getId());
+                    if (i < borrowed.size() - 1) sb.append(".");
+                }
+                fw.write(sb.toString());
+                fw.write("\n");
+            }
+
+            // Last line: current nextId counter
+            fw.write(String.valueOf(User.getNextId()));
+
+        } catch (IOException e) {
+            System.out.println("Error saving users: " + e.getMessage());
         }
     }
 }

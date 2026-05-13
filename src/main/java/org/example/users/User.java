@@ -1,5 +1,4 @@
 package org.example.users;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.LibrarySystem;
@@ -22,6 +21,7 @@ public abstract class User {
     @Setter
     private String name;
     private String id;
+    @Getter @Setter
     private static int nextId = 1;
     protected List<Item> borrowedItems = new ArrayList<>();
     protected int limit;

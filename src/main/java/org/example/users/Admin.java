@@ -4,6 +4,7 @@ import org.example.LibrarySystem;
 import org.example.items.Item;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Represents a library administrator with elevated privileges.
@@ -22,6 +23,12 @@ public class Admin extends User implements Reportable {
      */
     public Admin(String name) {
         super(name);
+        limit = Integer.MAX_VALUE;
+    }
+
+    public Admin(String name, String id, List<Item> borrowedItems) {
+        super(name, id, borrowedItems);
+        limit = Integer.MAX_VALUE;
     }
 
     /**

@@ -6,6 +6,7 @@ import org.example.items.Item;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,6 +28,11 @@ public class Student extends User {
      */
     public Student(String name) {
         super(name);
+        limit = Constants.BORROW_LIMIT_STUDENT;
+    }
+
+    public Student(String name, String id, List<Item> borrowedItems) {
+        super(name, id, borrowedItems);
         limit = Constants.BORROW_LIMIT_STUDENT;
     }
 
