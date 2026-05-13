@@ -106,10 +106,10 @@ public class LibrarySystem {
     }
 
     public static Item searchItemRecursive(String keyword) {
-        Item result = binarySearch(itemsByName, keyword, 0, items.size() - 1);
+        Item result = binarySearch(itemsByName, true, keyword, 0, items.size() - 1);
         if (result != null) {return result;}
 
-        return binarySearch(itemsByResponsable, keyword, 0, items.size() - 1);
+        return binarySearch(itemsByResponsable, false ,keyword, 0, items.size() - 1);
     }
 
     private static boolean successFullOperation(boolean success, Item item, Item.Status status) {
@@ -122,20 +122,20 @@ public class LibrarySystem {
     }
 
 
-    private static Item binarySearch(List<Item> list, String keyword, int left, int right) {
+    private static Item binarySearch(List<Item> list, boolean byTitle, String keyword, int left, int right) {
         if (left > right) {
             return null;
         }
 
         int mid = left + (right - left) / 2;
         Item midItem = list.get(mid);
-        int cmp = midItem.getTitle().compareTo(keyword);
+        int cmp = byTitle ? midItem.getTitle().compareTo(keyword) : midItem.getResponsable().compareTo(keyword);
 
         if (cmp == 0) { return midItem; };
         if (cmp > 0) {
-            return binarySearch(list, keyword, left, mid - 1);
+            return binarySearch(list, byTitle ,keyword, left, mid - 1);
         } else {
-            return binarySearch(list, keyword, mid + 1, right);
+            return binarySearch(list, byTitle ,keyword, mid + 1, right);
         }
     }
 
