@@ -29,6 +29,18 @@ public class DVD extends Item {
         this.duration = duration;
     }
 
+    /**
+     * Reconstructs a DVD from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id —
+     * it is restored exactly as provided.
+     *
+     * @param title       the DVD's title
+     * @param responsable the DVD's director
+     * @param id          the exact id to restore
+     * @param status      the item's persisted status
+     * @param type        the item type (should always be {@link Type#DVD})
+     * @param duration    the runtime in minutes
+     */
     public DVD(String title, String responsable, String id, Status status, Type type, int duration) {
         super(title, responsable, id, status, type);
         this.duration = duration;

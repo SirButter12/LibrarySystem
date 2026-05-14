@@ -36,6 +36,15 @@ public abstract class User {
         this.id = String.format("%06d", nextId++);
     }
 
+    /**
+     * Reconstructs a User from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id
+     * or increment the id counter — both are the caller's responsibility.
+     *
+     * @param name          the user's name
+     * @param id            the exact id to restore
+     * @param borrowedItems the list of items currently borrowed by this user
+     */
     public User(String name, String id, List<Item> borrowedItems) {
         this.name = name;
         this.id = id;
@@ -118,6 +127,10 @@ public abstract class User {
                 this.name, this.id);
     }
 
+    /**
+     * Sorts users by name (case-sensitive), breaking ties by id
+     * to guarantee a stable total ordering.
+     */
     public static class NameComparator implements Comparator<User> {
         @Override
         public int compare(User o1, User o2) {
@@ -131,6 +144,11 @@ public abstract class User {
         }
     }
 
+    /**
+     * Sorts users by id in ascending order.
+     * Since ids are zero-padded fixed-length strings (e.g. "000001"),
+     * lexicographic ordering is equivalent to numeric ordering.
+     */
     public static class IdComparator implements Comparator<User> {
         @Override
         public int compare(User o1, User o2) {

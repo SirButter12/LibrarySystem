@@ -38,6 +38,19 @@ public class Book extends Item {
         USBN = String.format("%d", hashCode());
     }
 
+    /**
+     * Reconstructs a Book from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id
+     * or recalculate the USBN — both are restored exactly as provided.
+     *
+     * @param title       the book's title
+     * @param responsable the book's author
+     * @param id          the exact id to restore
+     * @param status      the item's persisted status
+     * @param type        the item type (should always be {@link Type#BOOK})
+     * @param genre       the book's genre
+     * @param USBN        the book's persisted USBN
+     */
     public Book(String title, String responsable, String id, Status status, Type type, String genre, String USBN) {
         super(title, responsable, id, status, type);
         this.genre = genre;

@@ -49,6 +49,20 @@ public abstract class Item {
         this.id = String.format("%06d", nextId++);
     }
 
+    /**
+     * Reconstructs an item from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id
+     * or increment the id counter — both are the caller's responsibility.
+     *
+     * <p>Intended for use by subclass constructors when restoring state
+     * from a CSV file via {@link org.example.LibrarySystem#loadItems()}.</p>
+     *
+     * @param title       the item's title
+     * @param responsable the person or organization accountable for this item
+     * @param id          the exact id to restore
+     * @param status      the item's persisted status
+     * @param type        the item's media type
+     */
     public Item(String title, String responsable, String id, Status status, Type type) {
         this.title = title;
         this.responsable = responsable;
@@ -57,6 +71,11 @@ public abstract class Item {
         this.type = type;
     }
 
+    /**
+     * Sorts items by id in ascending order.
+     * Since ids are zero-padded fixed-length strings (e.g. "000001"),
+     * lexicographic ordering is equivalent to numeric ordering.
+     */
     public static class IdComparator implements Comparator<Item> {
         @Override
         public int compare(Item o1, Item o2) {

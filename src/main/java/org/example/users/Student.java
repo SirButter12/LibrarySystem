@@ -31,6 +31,15 @@ public class Student extends User {
         limit = Constants.BORROW_LIMIT_STUDENT;
     }
 
+    /**
+     * Reconstructs a Student from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id —
+     * it is restored exactly as provided.
+     *
+     * @param name          the student's name
+     * @param id            the exact id to restore
+     * @param borrowedItems the list of items currently borrowed by this user
+     */
     public Student(String name, String id, List<Item> borrowedItems) {
         super(name, id, borrowedItems);
         limit = Constants.BORROW_LIMIT_STUDENT;

@@ -72,6 +72,14 @@ public class LibrarySystem {
         };
     }
 
+    /**
+     * Registers a new user in the library system.
+     * The user is inserted into both sorted lists: {@code users} by id
+     * and {@code usersByName} by name, to support binary search on either field.
+     *
+     * @param user the user to add
+     * @return true if added successfully, false if the user already exists
+     */
     public static boolean addUser(User user) {
         if (users.contains(user)) {
             return false;
@@ -86,6 +94,14 @@ public class LibrarySystem {
         return true;
     }
 
+
+    /**
+     * Removes a user from the library system entirely.
+     * The user is removed from both sorted lists.
+     *
+     * @param user the user to remove
+     * @return true if removed successfully, false if the user does not exist
+     */
     public static boolean removeUser(User user) {
         if(!users.contains(user)) {
             return false;
@@ -234,6 +250,15 @@ public class LibrarySystem {
         throw new InexistentItemException("This item does not exist in the system");
     }
 
+    /**
+     * Searches for a user by keyword using recursive binary search.
+     * First searches by id in {@code users}; if not found,
+     * searches by name in {@code usersByName}.
+     *
+     * @param keyString the exact id or name to search for (case-sensitive)
+     * @return the matching user
+     * @throws InexistentItemException if no user matches the keyword
+     */
     public static User searchUser(String keyString) {
         User result = binarySearchUser(0, keyString, 0, users.size() - 1);
         if (result != null) {return result;}
@@ -283,6 +308,18 @@ public class LibrarySystem {
         }
     }
 
+    /**
+     * Recursive binary search over a sorted user list.
+     * Requires the list to be sorted by the corresponding field for correct results.
+     *
+     * @param mode  0 searches by id in {@code users};
+     *              1 searches by name in {@code usersByName}
+     * @param name  the exact value to search for (case-insensitive)
+     * @param left  the left boundary of the current search range (inclusive)
+     * @param right the right boundary of the current search range (inclusive)
+     * @return the matching user, or null if not found
+     * @throws IllegalArgumentException if mode is not 0 or 1
+     */
     private static User binarySearchUser(int mode, String name, int left, int right) {
         if (left > right) {
             return null;
@@ -329,6 +366,18 @@ public class LibrarySystem {
                 .orElse(null);
     }
 
+    /**
+     * Generates a CSV inventory report grouped by item status.
+     * Each row begins with the status label (INSTORE, BORROWED, LOST),
+     * followed by comma-separated items in the format:
+     * {@code id|title|type|responsable}.
+     *
+     * <p>Reports are saved in the given directory and named sequentially
+     * (report_1.csv, report_2.csv, etc.) to avoid overwriting existing files.</p>
+     *
+     * @param directory the folder where the report will be saved
+     * @return the generated report file, or null if an error occurred
+     */
     public static File generateReport(File directory) {
         int n = 1;
         File reportFile;

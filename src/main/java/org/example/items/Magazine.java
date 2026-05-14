@@ -28,6 +28,18 @@ public class Magazine extends Item {
         this.issueNumber = issueNumber;
     }
 
+    /**
+     * Reconstructs a Magazine from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id —
+     * it is restored exactly as provided.
+     *
+     * @param title       the magazine's title
+     * @param responsable the magazine's publisher
+     * @param id          the exact id to restore
+     * @param status      the item's persisted status
+     * @param type        the item type (should always be {@link Type#MAGAZINE})
+     * @param issueNumber the edition number
+     */
     public Magazine(String title, String responsable, String id, Status status, Type type, int issueNumber) {
         super(title, responsable, id, status, type);
         this.issueNumber = issueNumber;

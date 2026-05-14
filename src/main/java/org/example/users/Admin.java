@@ -26,6 +26,15 @@ public class Admin extends User implements Reportable {
         limit = Integer.MAX_VALUE;
     }
 
+    /**
+     * Reconstructs an Admin from persisted data (e.g. loaded from CSV).
+     * Unlike the standard constructor, this does not auto-generate an id —
+     * it is restored exactly as provided.
+     *
+     * @param name          the administrator's name
+     * @param id            the exact id to restore
+     * @param borrowedItems the list of items currently borrowed by this user
+     */
     public Admin(String name, String id, List<Item> borrowedItems) {
         super(name, id, borrowedItems);
         limit = Integer.MAX_VALUE;
